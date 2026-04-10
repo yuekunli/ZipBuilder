@@ -121,9 +121,15 @@ namespace ZipBuilder
 
 
             using (var entryStream = entry.Open())
-            using (var fileStream = File.OpenRead(filePath))
+            using (var fileStream = new FileStream(
+                filePath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                1024 * 1024,
+                FileOptions.SequentialScan))
             {
-                fileStream.CopyTo(entryStream);
+                fileStream.CopyTo(entryStream, 1024 * 1024);
             }
         }
 
