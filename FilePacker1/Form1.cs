@@ -82,6 +82,17 @@ namespace ZipBuilder
             }
         }
 
+        private void btnReset_Click(Object sender, EventArgs e)
+        {
+            selectedPaths.Clear();
+
+            listBoxItems.Items.Clear();
+            lblStatus.Text = "Ready";
+            progressBar1.Value = 0;
+            radioWindows.Checked = true;
+            radioLinux.Checked = false;
+        }
+
         //private void btnCreateZip_Click(object sender, EventArgs e)
         //{
         //    if (selectedPaths.Count == 0)
@@ -140,18 +151,63 @@ namespace ZipBuilder
                 }
 
                 btnCreateZip.Enabled = false;
+                btnAddFiles.Enabled = false;
+                btnAddFolder.Enabled = false;
+                btnRemove.Enabled = false;
+                btnReset.Enabled = false;
                 lblStatus.Text = "Creating zip ...";
 
-                saveFileDialog1.Filter = "Zip files (*.zip)|*.zip";
-                saveFileDialog1.FileName = "archive.zip";
-
-                if (saveFileDialog1.ShowDialog() != DialogResult.OK)
-                    return;
-
-                await Task.Run(() =>
+                using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
                 {
-                    CreateDeterministicZip(saveFileDialog1.FileName);
-                });
+                    saveFileDialog1.Filter = "Zip files (*.zip)|*.zip";
+                    saveFileDialog1.FileName = ".zip";
+
+                    if (saveFileDialog1.ShowDialog() != DialogResult.OK)
+                        return;
+
+                    progressBar1.MarqueeAnimationSpeed = 100;
+
+                    var progressUpdater = new Progress<int>(async value =>
+                    {
+                        if (value < progressBar1.Maximum)
+                        {
+                            progressBar1.Value = value;
+                            progressBar1.Update();
+                            lblStatus.Text = $"Processed {progressBar1.Value}/{progressBar1.Maximum}";
+                        }
+                        //if (progressBar1.Value == progressBar1.Maximum)
+                        //{
+                        //    progressBar1.Refresh();
+                        //    await Task.Yield();
+                        //    lblStatus.Text = "Done";
+                        //    lblStatus.Update();
+                        //}
+                    });
+
+                    var progressMaxSetter = new Progress<int>(value => { progressBar1.Maximum = value; });
+
+                    lblStatus.Text = "Start processing ...";
+
+                    //await Task.Run(() =>
+                    //{
+                    //    CreateDeterministicZip(saveFileDialog1.FileName, progressMaxSetter, progressUpdater);
+                    //});
+
+                    await CreateDeterministicZip(saveFileDialog1.FileName, progressMaxSetter, progressUpdater);
+
+                    progressBar1.Value = progressBar1.Maximum;
+                    progressBar1.Refresh();
+                    await Task.Yield();
+                    lblStatus.Text = "Done";
+                    lblStatus.Update();
+
+                    //lblStatus.Text = "Done";
+                    //lblStatus.Update();
+                    //lblStatus.Refresh();
+                    //Application.DoEvents();
+                    //await Task.Yield();
+                    //await Task.Delay(100);
+                }
             }
             catch (Exception ex)
             {
@@ -160,6 +216,16 @@ namespace ZipBuilder
             finally
             {
                 btnCreateZip.Enabled = true;
+                btnAddFiles.Enabled = true;
+                btnAddFolder.Enabled = true;
+                btnRemove.Enabled = true;
+                btnReset.Enabled = true;
+                //lblStatus.Text = "Done";
+                //lblStatus.Update();
+                //lblStatus.Refresh();
+                //Application.DoEvents();
+                //await Task.Yield();
+                //await Task.Delay(100);
             }
         }
 
@@ -237,31 +303,37 @@ namespace ZipBuilder
             return result;
         }
 
-        private async void CreateDeterministicZip(string zipPath)
+        private async Task CreateDeterministicZip(string zipPath, IProgress<int> progressMaxSetter, IProgress<int> progressUpdater)
         {
             var allFiles = GetAllFiles();
 
             var sorted = allFiles.OrderBy(f => f.ZipPath, StringComparer.Ordinal).ToList();
 
-            progressBar1.Value = 0;
-            progressBar1.Maximum = allFiles.Count;
+            //progressBar1.Value = 0;
+            //progressBar1.Maximum = allFiles.Count;
 
+            progressMaxSetter.Report(allFiles.Count);
+            progressUpdater.Report(0);
+            int fileCounter = 0;
             using (var fs = new FileStream(zipPath, FileMode.Create))
             using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))
             {
                 foreach (var file in sorted)
                 {
-                    progressBar1.Value++;
+                    //progressBar1.Value++;
 
-                    lblStatus.Text = $"Processing {progressBar1.Value}/{progressBar1.Maximum}";
+                    //lblStatus.Text = $"Processing {progressBar1.Value}/{progressBar1.Maximum}";
                     
-                    Application.DoEvents(); // keep UI responsive
+                    //Application.DoEvents(); // keep UI responsive
 
                     await AddDeterministicEntry(archive, file.FullPath, file.ZipPath);
+
+                    progressUpdater.Report(++fileCounter);
                 }
             }
-            lblStatus.Text = "Done";
-            MessageBox.Show("Zip created successfully!");
+            //lblStatus.Text = "Done";
+
+            //MessageBox.Show("Zip created successfully!");
         }
 
         private async Task AddDeterministicEntry(ZipArchive archive, string filePath, string entryName)

@@ -33,12 +33,13 @@
             this.btnAddFolder = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnCreateZip = new System.Windows.Forms.Button();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            //this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.lblStatus = new System.Windows.Forms.Label();
             this.groupBoxOS = new System.Windows.Forms.GroupBox();
-            this.radioWindows = new System.Windows.Forms.RadioButton();
             this.radioLinux = new System.Windows.Forms.RadioButton();
+            this.radioWindows = new System.Windows.Forms.RadioButton();
+            this.btnReset = new System.Windows.Forms.Button();
             this.groupBoxOS.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,23 +113,12 @@
             // 
             this.groupBoxOS.Controls.Add(this.radioLinux);
             this.groupBoxOS.Controls.Add(this.radioWindows);
-            this.groupBoxOS.Location = new System.Drawing.Point(625, 215);
+            this.groupBoxOS.Location = new System.Drawing.Point(625, 290);
             this.groupBoxOS.Name = "groupBoxOS";
             this.groupBoxOS.Size = new System.Drawing.Size(130, 115);
             this.groupBoxOS.TabIndex = 7;
             this.groupBoxOS.TabStop = false;
             this.groupBoxOS.Text = "Target OS";
-            // 
-            // radioWindows
-            // 
-            this.radioWindows.AutoSize = true;
-            this.radioWindows.Location = new System.Drawing.Point(6, 37);
-            this.radioWindows.Name = "radioWindows";
-            this.radioWindows.Size = new System.Drawing.Size(83, 20);
-            this.radioWindows.TabIndex = 0;
-            this.radioWindows.TabStop = true;
-            this.radioWindows.Text = "Windows";
-            this.radioWindows.UseVisualStyleBackColor = true;
             // 
             // radioLinux
             // 
@@ -141,11 +131,33 @@
             this.radioLinux.Text = "Linux/macOS";
             this.radioLinux.UseVisualStyleBackColor = true;
             // 
+            // radioWindows
+            // 
+            this.radioWindows.AutoSize = true;
+            this.radioWindows.Location = new System.Drawing.Point(6, 37);
+            this.radioWindows.Name = "radioWindows";
+            this.radioWindows.Size = new System.Drawing.Size(83, 20);
+            this.radioWindows.TabIndex = 0;
+            this.radioWindows.TabStop = true;
+            this.radioWindows.Text = "Windows";
+            this.radioWindows.UseVisualStyleBackColor = true;
+            // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(625, 203);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(130, 41);
+            this.btnReset.TabIndex = 8;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(807, 475);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.groupBoxOS);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.progressBar1);
@@ -171,12 +183,13 @@
         private System.Windows.Forms.Button btnAddFolder;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnCreateZip;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        //private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.GroupBox groupBoxOS;
         private System.Windows.Forms.RadioButton radioLinux;
         private System.Windows.Forms.RadioButton radioWindows;
+        private System.Windows.Forms.Button btnReset;
     }
 }
 

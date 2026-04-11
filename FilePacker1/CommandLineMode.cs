@@ -30,6 +30,8 @@ namespace ZipBuilder
                 }
 
                 CreateDeterministicZip(selectedOS, outputPath, inputs);
+
+                Console.WriteLine("Zip created successfully!");
             }
             catch (Exception ex)
             {
