@@ -148,6 +148,8 @@ namespace ZipBuilder
 
                     await CreateDeterministicZip(saveFileDialog1.FileName, progressUpdater, labelProgressMaxSetter, lableProgressUpdater);
 
+                    await Task.Run(() => ZipEnforcer.SetGeneralPurposeBit(saveFileDialog1.FileName));
+
                     progressBar1.Value = 100;
                     progressBar1.Refresh();
                     await Task.Yield();
@@ -242,7 +244,8 @@ namespace ZipBuilder
             int fileCounter = 0;
             long progressSoFar = 0;
             long progressAccumulateForMinMetric = 0;
-            long minProgressMetric = totalSize / 100;
+            long minProgressMetric = totalSize / 100; // total size may be less than 100 bytes
+            minProgressMetric = minProgressMetric > 0 ? minProgressMetric : 1;
             byte[] buffer = new byte[1024 * 1024];
             using (var fs = new FileStream(zipPath, FileMode.Create))
             using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))

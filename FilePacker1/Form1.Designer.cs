@@ -33,7 +33,6 @@
             this.btnAddFolder = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnCreateZip = new System.Windows.Forms.Button();
-            //this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.lblStatus = new System.Windows.Forms.Label();
             this.groupBoxOS = new System.Windows.Forms.GroupBox();
@@ -69,7 +68,7 @@
             this.btnAddFolder.Name = "btnAddFolder";
             this.btnAddFolder.Size = new System.Drawing.Size(130, 45);
             this.btnAddFolder.TabIndex = 2;
-            this.btnAddFolder.Text = "Add Folder";
+            this.btnAddFolder.Text = "Add Folders";
             this.btnAddFolder.UseVisualStyleBackColor = true;
             this.btnAddFolder.Click += new System.EventHandler(this.btnAddFolder_Click);
             // 
@@ -89,7 +88,7 @@
             this.btnCreateZip.Name = "btnCreateZip";
             this.btnCreateZip.Size = new System.Drawing.Size(164, 34);
             this.btnCreateZip.TabIndex = 4;
-            this.btnCreateZip.Text = "Create Zip";
+            this.btnCreateZip.Text = "Package Content";
             this.btnCreateZip.UseVisualStyleBackColor = true;
             this.btnCreateZip.Click += new System.EventHandler(this.btnCreateZip_Click);
             // 
